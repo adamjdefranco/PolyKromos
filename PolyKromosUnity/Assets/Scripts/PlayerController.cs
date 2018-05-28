@@ -125,12 +125,6 @@ public class PlayerController : MonoBehaviour {
 		DestroyObjectsForGameReset ();
 		pastGroundSegment = (GameObject)Instantiate (groundSeg, new Vector3 (0, 0, 0), Quaternion.identity);
 		pastGroundSegment.tag = "GroundSegment";
-		//zDistance += 100f;
-
-		//DeleteGameObjectsBehindPlayer ();
-		//DeleteAllFireballs ();
-
-
 		powerupParticleSystem.SetActive (false);
 	}
 
