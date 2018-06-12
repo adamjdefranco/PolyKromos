@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 
 	//GameObjects
 	public GameObject[] MainMenuButtons;
+	public GameObject PowerupParticleSystemParent;
 	public GameObject powerupParticleSystem;
 	public GameObject inGameCanvas;
 	public GameObject mainMenuCanvas;
@@ -98,6 +99,7 @@ public class PlayerController : MonoBehaviour {
         pointsSinceLastSpeedIncrement = 0;
 
 		powerupParticleSystem.SetActive (false);
+		PowerupParticleSystemParent.SetActive (false);
 	}
 
 	public void reset() {
@@ -125,6 +127,7 @@ public class PlayerController : MonoBehaviour {
 		DestroyObjectsForGameReset ();
 		pastGroundSegment = (GameObject)Instantiate (groundSeg, new Vector3 (0, 0, 0), Quaternion.identity);
 		pastGroundSegment.tag = "GroundSegment";
+		PowerupParticleSystemParent.SetActive (false);
 		powerupParticleSystem.SetActive (false);
 	}
 
@@ -167,6 +170,7 @@ public class PlayerController : MonoBehaviour {
 	public void TurnOnPowerup() {
 		SwitchPlayerMaterialToRainbow ();
 		isInPowerupMode = true;
+		PowerupParticleSystemParent.SetActive (true);
 		powerupParticleSystem.SetActive (true);
 		scoreForParticleSystemToTurnOff = Score.singleton.score + 4;
 		// You may not obtain another powerup/heart/clock while in powerup mode
@@ -178,6 +182,7 @@ public class PlayerController : MonoBehaviour {
 
 	// Shut off powerup mode
 	public void TurnOffPowerup() {
+		PowerupParticleSystemParent.SetActive (false);
 		powerupParticleSystem.SetActive (false);
 		SwitchPlayerMaterialToNormal ();
 		isInPowerupMode = false;
@@ -248,8 +253,8 @@ public class PlayerController : MonoBehaviour {
             PlayerPrefsController.singleton.SetCurrentAmountOfAchievementByAchievementType("Distance");
         }
 
-        if (powerupParticleSystem.activeInHierarchy) {
-            powerupParticleSystem.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 0.2f);
+        if (PowerupParticleSystemParent.activeInHierarchy) {
+			PowerupParticleSystemParent.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 0.2f);
         }
 
         if (gameObject.transform.position.z > zDistance && !UIController.singleton.isEndGamePanelOn()) {
