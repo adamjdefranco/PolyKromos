@@ -360,6 +360,10 @@ public class UIController : MonoBehaviour {
 		if(!isPaused) {
 			pauseButton.GetComponent<Text> ().text = "Paused";
 			PlayerController.singleton.speedIncreasing = 0;
+			if (PlayerController.singleton.isInPowerupMode) {
+				ParticleSystem.EmissionModule emission = PlayerController.singleton.powerupParticleSystem.GetComponent<ParticleSystem> ().emission;
+				emission.enabled = false;
+			}
 
 			GameObject[] Fireballs = GameObject.FindGameObjectsWithTag ("Fireball");
 			for (int i = 0; i < Fireballs.Length; i++) {
@@ -371,6 +375,10 @@ public class UIController : MonoBehaviour {
 		} else {
 			pauseButton.GetComponent<Text> ().text = "";
 			PlayerController.singleton.speedIncreasing = PlayerController.singleton.memoizedSpeed;
+			if (PlayerController.singleton.isInPowerupMode) {
+				ParticleSystem.EmissionModule emission = PlayerController.singleton.powerupParticleSystem.GetComponent<ParticleSystem> ().emission;
+				emission.enabled = true;
+			}
 			GameObject[] Fireballs = GameObject.FindGameObjectsWithTag ("Fireball");
 			for (int i = 0; i < Fireballs.Length; i++) {
 				if (Fireballs [i].GetComponentInParent<FireballMovement> () != null) {
