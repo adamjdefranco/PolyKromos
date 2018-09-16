@@ -119,6 +119,7 @@ public class PlayerController : MonoBehaviour {
 		hasGameStarted = false;
         isInEndGameState = false;
         pointsSinceLastSpeedIncrement = 0;
+		ResetLifetimeOfPowerupParticleSystem ();
 	}
 
 	public void resetPositionOfPlayer() {
@@ -199,6 +200,7 @@ public class PlayerController : MonoBehaviour {
 	public void DecrementSpeedFromClocksPowerup() {
         PlayerPrefsController.singleton.SetCurrentAmountOfAchievementByAchievementType("ClockPowerups");
 		speedIncreasing -= 1.5f;
+		ChangeStartLifetimeOfPowerupParticleSystem (0.016f);
 		memoizedSpeed = speedIncreasing;
         pointsSinceLastSpeedIncrement = 0;
 		if (speedIncreasing == minimumForwardSpeed) {
@@ -271,6 +273,7 @@ public class PlayerController : MonoBehaviour {
         // Increases the players speed by 1 if they have collected 20 points since the last speed increment or decrement (Can be moved to a method, call from score)
         if (pointsSinceLastSpeedIncrement > 9) {
             speedIncreasing += .75f;
+			ChangeStartLifetimeOfPowerupParticleSystem (-0.008f);
             memoizedSpeed = speedIncreasing;
             if (speedIncreasing > minimumForwardSpeed && !isInPowerupMode) {
                 SetBarrierParticleSystemVisibility(true, "ClocksParticleSystem");
@@ -443,6 +446,22 @@ public class PlayerController : MonoBehaviour {
 
 		#endif
     }
+
+	// Change the lifetime powerup particle system when speed of ball is being increased or decreased
+	public void ChangeStartLifetimeOfPowerupParticleSystem(float delta) {
+		ParticleSystem.MainModule PowerupParticleSystemMain = powerupParticleSystem.GetComponent<ParticleSystem>().main;
+		// Limits the minimum and maximum start lifetime for the particle system
+		if (PowerupParticleSystemMain.startLifetime.constant > 0.01f && PowerupParticleSystemMain.startLifetime.constant <= 0.3f) {
+			float newLifetime = PowerupParticleSystemMain.startLifetime.constant + delta;
+			PowerupParticleSystemMain.startLifetime = newLifetime;
+		}
+	}
+
+	//Reset the start lifetime of the powerup particle system
+	public void ResetLifetimeOfPowerupParticleSystem() {
+		ParticleSystem.MainModule PowerupParticleSystemMain = powerupParticleSystem.GetComponent<ParticleSystem>().main;
+		PowerupParticleSystemMain.startLifetime = 0.3f;
+	}
 
 
 	#region EditPlayerMaterial

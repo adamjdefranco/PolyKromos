@@ -161,6 +161,7 @@ public class UIController : MonoBehaviour {
 		}
 			
 		DontDestroyOnLoad(this);
+
 	}
 
 	public Animator AnimatePlayButton;
